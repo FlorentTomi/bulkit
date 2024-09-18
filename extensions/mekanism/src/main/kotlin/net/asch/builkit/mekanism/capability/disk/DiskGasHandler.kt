@@ -7,10 +7,11 @@ import mekanism.api.chemical.gas.IGasHandler
 import net.asch.builkit.mekanism.BulkIt
 import net.asch.builkit.mekanism.kotlin.extension.identifier
 import net.asch.builkit.mekanism.kotlin.extension.stack
-import net.asch.bulkit.api.capability.disk.DiskHandler
+import net.asch.bulkit.api.capability.disk.IDiskHandler
 import net.asch.bulkit.api.data.ResourceIdentifier
 import net.asch.bulkit.api.kotlin.delegate.NullableComponentDelegate
 import net.asch.bulkit.api.resource.ResourceType
+import net.asch.bulkit.api.setup.BulkItCapabilities
 import net.minecraft.world.item.ItemStack
 import net.neoforged.neoforge.fluids.FluidType
 
@@ -18,7 +19,7 @@ class DiskGasHandler(disk: ItemStack, private val allowRadioactive: Boolean) : I
     private val resourceType: ResourceType<Gas> =
         if (allowRadioactive) BulkIt.RESOURCES.gas.get() else BulkIt.RESOURCES.gasNonRadioactive.get()
     private var id: ResourceIdentifier<Gas>? by NullableComponentDelegate(disk, resourceType.id)
-    private val diskHandler: DiskHandler = disk.getCapability(DiskHandler.CAPABILITY)!!
+    private val diskHandler: IDiskHandler = disk.getCapability(BulkItCapabilities.Disk.RESOURCE, Unit)!!
 
     private val capacity: Long
         get() = capacity(diskHandler)
@@ -96,7 +97,7 @@ class DiskGasHandler(disk: ItemStack, private val allowRadioactive: Boolean) : I
     companion object {
         private const val DEFAULT_CAPACITY_MULTIPLIER = 32
 
-        fun capacity(resource: DiskHandler): Long =
+        fun capacity(resource: IDiskHandler): Long =
             (FluidType.BUCKET_VOLUME * resource.getMultiplier(DEFAULT_CAPACITY_MULTIPLIER)).toLong()
 
         fun create(disk: ItemStack, ctx: Void?): IGasHandler = DiskGasHandler(disk, true)

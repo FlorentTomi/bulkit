@@ -1,10 +1,11 @@
 package net.asch.bulkit.capability.disk
 
 import net.asch.bulkit.BulkIt
-import net.asch.bulkit.api.capability.disk.DiskHandler
+import net.asch.bulkit.api.capability.disk.IDiskHandler
 import net.asch.bulkit.api.data.ResourceIdentifier
 import net.asch.bulkit.api.kotlin.delegate.NullableComponentDelegate
 import net.asch.bulkit.api.resource.ResourceType
+import net.asch.bulkit.api.setup.BulkItCapabilities
 import net.asch.bulkit.kotlin.extension.identifier
 import net.asch.bulkit.kotlin.extension.stack
 import net.minecraft.world.item.ItemStack
@@ -17,7 +18,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem
 class DiskFluidHandler(private val disk: ItemStack) : IFluidHandlerItem {
     private val resourceType: ResourceType<Fluid> = BulkIt.RESOURCES.fluid.get()
     private var id: ResourceIdentifier<Fluid>? by NullableComponentDelegate(disk, resourceType.id)
-    private val diskHandler: DiskHandler = disk.getCapability(DiskHandler.CAPABILITY)!!
+    private val diskHandler: IDiskHandler = disk.getCapability(BulkItCapabilities.Disk.RESOURCE, Unit)!!
 
     private val capacity: Int
         get() = capacity(diskHandler)
@@ -98,7 +99,7 @@ class DiskFluidHandler(private val disk: ItemStack) : IFluidHandlerItem {
 
         fun create(stack: ItemStack, ctx: Void?): DiskFluidHandler = DiskFluidHandler(stack)
 
-        fun capacity(diskHandler: DiskHandler): Int =
+        fun capacity(diskHandler: IDiskHandler): Int =
             (FluidType.BUCKET_VOLUME * diskHandler.getMultiplier(DEFAULT_CAPACITY_MULTIPLIER))
     }
 }

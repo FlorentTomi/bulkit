@@ -1,10 +1,11 @@
 package net.asch.bulkit.capability.disk
 
 import net.asch.bulkit.BulkIt
-import net.asch.bulkit.api.capability.disk.DiskHandler
+import net.asch.bulkit.api.capability.disk.IDiskHandler
 import net.asch.bulkit.api.data.ResourceIdentifier
 import net.asch.bulkit.api.kotlin.delegate.NullableComponentDelegate
 import net.asch.bulkit.api.resource.ResourceType
+import net.asch.bulkit.api.setup.BulkItCapabilities
 import net.asch.bulkit.kotlin.extension.identifier
 import net.asch.bulkit.kotlin.extension.stack
 import net.minecraft.world.item.Item
@@ -14,7 +15,7 @@ import net.neoforged.neoforge.items.IItemHandler
 class DiskItemHandler(disk: ItemStack) : IItemHandler {
     private val resourceType: ResourceType<Item> = BulkIt.RESOURCES.item.get()
     private var id: ResourceIdentifier<Item>? by NullableComponentDelegate(disk, resourceType.id)
-    private val diskHandler: DiskHandler = disk.getCapability(DiskHandler.CAPABILITY)!!
+    private val diskHandler: IDiskHandler = disk.getCapability(BulkItCapabilities.Disk.RESOURCE, Unit)!!
 
     private val maxStackSize: Int
         get() = id?.holder?.value()?.defaultMaxStackSize ?: 0
@@ -92,9 +93,9 @@ class DiskItemHandler(disk: ItemStack) : IItemHandler {
 
         fun create(stack: ItemStack, ctx: Void?): IItemHandler = DiskItemHandler(stack)
 
-        fun capacity(maxStackSize: Int, diskHandler: DiskHandler): Int =
+        fun capacity(maxStackSize: Int, diskHandler: IDiskHandler): Int =
             maxStackSize * diskHandler.getMultiplier(DEFAULT_CAPACITY_MULTIPLIER)
 
-        fun capacity(stack: ItemStack, diskHandler: DiskHandler): Int = capacity(stack.maxStackSize, diskHandler)
+        fun capacity(stack: ItemStack, diskHandler: IDiskHandler): Int = capacity(stack.maxStackSize, diskHandler)
     }
 }
