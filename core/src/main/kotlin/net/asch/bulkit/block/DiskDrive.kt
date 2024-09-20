@@ -1,5 +1,7 @@
 package net.asch.bulkit.block
 
+import net.asch.bulkit.api.block.BlockStates
+import net.asch.bulkit.api.data.DriveDiskHandler
 import net.asch.bulkit.item.NetworkConfigurator
 import net.asch.bulkit.network.network.NetworkConfiguratorPayloads
 import net.minecraft.core.BlockPos
@@ -11,10 +13,20 @@ import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.SoundType
 import net.minecraft.world.level.block.state.BlockState
+import net.minecraft.world.level.block.state.StateDefinition
 import net.minecraft.world.level.material.PushReaction
 import net.minecraft.world.phys.BlockHitResult
 
 class DiskDrive(properties: Properties) : Block(properties) {
+    init {
+        registerDefaultState(stateDefinition.any().setValue(BlockStates.NETWORK_VIEW_SIZE, DriveDiskHandler.SIZE))
+    }
+
+    override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
+        builder.add(BlockStates.NETWORK_VIEW_SIZE)
+        super.createBlockStateDefinition(builder)
+    }
+
     override fun useItemOn(
         pStack: ItemStack,
         pState: BlockState,

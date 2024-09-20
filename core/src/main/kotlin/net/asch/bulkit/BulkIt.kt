@@ -3,8 +3,10 @@ package net.asch.bulkit
 import net.asch.bulkit.api.BulkItApi
 import net.asch.bulkit.api.resource.DeferredResources
 import net.asch.bulkit.api.setup.BulkItCapabilities
+import net.asch.bulkit.api.setup.NetworkAttachments
 import net.asch.bulkit.capability.disk.DiskHandler
 import net.asch.bulkit.capability.disk.DiskModHandler
+import net.asch.bulkit.capability.network.NetworkLink
 import net.asch.bulkit.network.disk.DiskUpdatePayloads
 import net.asch.bulkit.network.network.NetworkConfiguratorPayloads
 import net.asch.bulkit.network.network.NetworkPayloads
@@ -45,6 +47,14 @@ object BulkIt {
 
             event.registerItem(
                 BulkItCapabilities.Disk.MODS, ::DiskModHandler, resourceType.disk
+            )
+
+            event.registerBlockEntity(
+                BulkItCapabilities.Network.DRIVE_DISK_HANDLER, BlockEntities.DISK_DRIVE.get()
+            ) { bEntity, _ -> bEntity.getData(NetworkAttachments.DISK_HANDLER) }
+
+            event.registerBlockEntity(
+                BulkItCapabilities.Network.LINK, BlockEntities.NETWORK_VIEW.get(), ::NetworkLink
             )
         }
     }

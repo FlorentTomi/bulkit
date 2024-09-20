@@ -15,7 +15,7 @@ import net.neoforged.neoforge.fluids.FluidType
 import net.neoforged.neoforge.fluids.capability.IFluidHandler
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem
 
-class DiskFluidHandler(private val disk: ItemStack) : IFluidHandlerItem {
+class DiskFluidHandler(private val disk: ItemStack, ctx: Void?) : IFluidHandlerItem {
     private val resourceType: ResourceType<Fluid> = BulkIt.RESOURCES.fluid.get()
     private var id: ResourceIdentifier<Fluid>? by NullableComponentDelegate(disk, resourceType.id)
     private val diskHandler: IDiskHandler = disk.getCapability(BulkItCapabilities.Disk.RESOURCE, Unit)!!
@@ -96,8 +96,6 @@ class DiskFluidHandler(private val disk: ItemStack) : IFluidHandlerItem {
 
     companion object {
         private const val DEFAULT_CAPACITY_MULTIPLIER: Int = 32
-
-        fun create(stack: ItemStack, ctx: Void?): DiskFluidHandler = DiskFluidHandler(stack)
 
         fun capacity(diskHandler: IDiskHandler): Int =
             (FluidType.BUCKET_VOLUME * diskHandler.getMultiplier(DEFAULT_CAPACITY_MULTIPLIER))

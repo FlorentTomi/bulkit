@@ -1,6 +1,8 @@
 package net.asch.bulkit.capability.network
 
 import net.asch.bulkit.api.capability.network.DiskProxyResourceHandler
+import net.minecraft.core.Direction
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.neoforged.neoforge.capabilities.Capabilities
 import net.neoforged.neoforge.fluids.FluidStack
 import net.neoforged.neoforge.fluids.FluidType
@@ -8,12 +10,9 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem
 import net.neoforged.neoforge.items.IItemHandler
 
-class DiskProxyFluidHandler(size: Int, diskHandler: IItemHandler, slotTransform: ISlotTransform) :
-    DiskProxyResourceHandler<IFluidHandlerItem>(
-        size, diskHandler, slotTransform, Capabilities.FluidHandler.ITEM
-    ), IFluidHandler {
-    constructor(size: Int, diskHandler: IItemHandler) : this(size, diskHandler, UNIT_SLOT_TRANSFORM)
-
+class DiskProxyFluidHandler(bEntity: BlockEntity, ctx: Direction) : DiskProxyResourceHandler<IFluidHandlerItem>(
+    bEntity, Capabilities.FluidHandler.ITEM
+), IFluidHandler {
     override fun getTanks(): Int = size
 
     override fun getFluidInTank(tank: Int): FluidStack =

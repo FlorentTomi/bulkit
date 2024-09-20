@@ -1,10 +1,11 @@
 package net.asch.bulkit.api.capability.network
 
 import net.minecraft.core.BlockPos
-import net.neoforged.neoforge.items.IItemHandler
+import net.minecraft.world.level.block.entity.BlockEntity
 
 interface INetworkLink {
-    val root: IItemHandler?
+    val rootPos: BlockPos?
+    val root: BlockEntity?
 
     fun linkTo(bPos: BlockPos?)
     fun map(viewSlot: Int, rootSlot: Int?)

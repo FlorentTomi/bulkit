@@ -1,25 +1,40 @@
 package net.asch.bulkit.api.capability.network
 
+import net.asch.bulkit.api.block.BlockStates
 import net.asch.bulkit.api.capability.network.DiskProxyResourceHandler.ISlotTransform
+import net.asch.bulkit.api.setup.BulkItCapabilities
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.neoforged.neoforge.capabilities.ItemCapability
 import net.neoforged.neoforge.items.IItemHandler
 
 abstract class DiskProxyResourceHandler<T>(
-    val size: Int,
-    private val diskHandler: IItemHandler,
-    private val slotTransform: ISlotTransform,
-    private val cap: ItemCapability<T, Void?>
+    private val bEntity: BlockEntity, private val cap: ItemCapability<T, Void?>
 ) {
-    private val internalSize: Int = diskHandler.slots
+    private val link: INetworkLink?
+        get() = bEntity.level?.getCapability(
+            BulkItCapabilities.Network.LINK, bEntity.blockPos, bEntity.blockState, bEntity, Unit
+        )
+
+    private val diskHandler: IItemHandler?
+        get() {
+            val rootPos = link?.rootPos
+            return if (rootPos != null) {
+                bEntity.level?.getCapability(BulkItCapabilities.Network.DRIVE_DISK_HANDLER, rootPos, Unit)
+            } else {
+                bEntity.level?.getCapability(BulkItCapabilities.Network.DRIVE_DISK_HANDLER, bEntity.blockPos, Unit)
+            }
+        }
+
+    val size: Int = bEntity.blockState.getValue(BlockStates.NETWORK_VIEW_SIZE)
 
     private fun <R> transformAndInvoke(slot: Int, errorVal: R, fn: (T?) -> R?): R {
-        val transformedSlot = slotTransform.transform(slot)
+        val transformedSlot = link?.getRootSlot(slot) ?: slot
         if (transformedSlot == INVALID_SLOT) {
             return errorVal
         }
 
-        return if (transformedSlot in 0 until internalSize) {
-            fn(diskHandler.getStackInSlot(transformedSlot).getCapability(cap)) ?: errorVal
+        return if (transformedSlot in 0 until size) {
+            fn(diskHandler?.getStackInSlot(transformedSlot)?.getCapability(cap)) ?: errorVal
         } else {
             errorVal
         }
@@ -40,8 +55,18 @@ abstract class DiskProxyResourceHandler<T>(
         fun transform(slot: Int): Int
     }
 
+    fun interface IDiskProxyResourceHandlerProvider<T : DiskProxyResourceHandler<*>> {
+        fun create(diskHandler: IItemHandler): T
+    }
+
     companion object {
         const val INVALID_SLOT: Int = -1
         val UNIT_SLOT_TRANSFORM: ISlotTransform = ISlotTransform { slot: Int -> slot }
+
+        fun <T : DiskProxyResourceHandler<*>> create(
+            bEntity: BlockEntity, provider: IDiskProxyResourceHandlerProvider<T>
+        ) = bEntity.level?.getCapability(
+            BulkItCapabilities.Network.DRIVE_DISK_HANDLER, bEntity.blockPos, bEntity.blockState, bEntity, Unit
+        )?.let { provider.create(it) }
     }
 }

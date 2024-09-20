@@ -28,11 +28,11 @@ object BulkItCapabilities {
             LINK, bEntity.blockPos, bEntity.blockState, bEntity, Unit
         )
 
-        val DRIVE_DISK_HANDLER: BlockCapability<IItemHandler, Direction?> =
-            BlockCapability.createSided(BulkItApi.location("drive_disk_handler"), IItemHandler::class.java)
+        val DRIVE_DISK_HANDLER: BlockCapability<IItemHandler, Unit> =
+            BlockCapability.create(BulkItApi.location("drive_disk_handler"), IItemHandler::class.java, Unit::class.java)
 
         fun getDriveDiskHandler(bEntity: BlockEntity, ctx: Direction): IItemHandler? = bEntity.level?.getCapability(
-            DRIVE_DISK_HANDLER, bEntity.blockPos, bEntity.blockState, bEntity, ctx
+            DRIVE_DISK_HANDLER, bEntity.blockPos, bEntity.blockState, bEntity, Unit
         )
     }
 }

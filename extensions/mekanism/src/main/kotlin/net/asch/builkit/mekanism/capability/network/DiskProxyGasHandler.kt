@@ -5,15 +5,12 @@ import mekanism.api.chemical.gas.GasStack
 import mekanism.api.chemical.gas.IGasHandler
 import mekanism.common.capabilities.Capabilities
 import net.asch.bulkit.api.capability.network.DiskProxyResourceHandler
+import net.minecraft.core.Direction
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.neoforged.neoforge.fluids.FluidType
-import net.neoforged.neoforge.items.IItemHandler
 
-class DiskProxyGasHandler(size: Int, diskHandler: IItemHandler, slotTransform: ISlotTransform) :
-    DiskProxyResourceHandler<IGasHandler>(
-        size, diskHandler, slotTransform, Capabilities.GAS.item
-    ), IGasHandler {
-    constructor(size: Int, diskHandler: IItemHandler) : this(size, diskHandler, UNIT_SLOT_TRANSFORM)
-
+class DiskProxyGasHandler(bEntity: BlockEntity, ctx: Direction) :
+    DiskProxyResourceHandler<IGasHandler>(bEntity, Capabilities.GAS.item), IGasHandler {
     override fun getTanks(): Int = size
 
     override fun getChemicalInTank(tank: Int): GasStack =

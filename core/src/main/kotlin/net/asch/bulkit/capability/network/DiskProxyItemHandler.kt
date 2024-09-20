@@ -1,15 +1,14 @@
 package net.asch.bulkit.capability.network
 
 import net.asch.bulkit.api.capability.network.DiskProxyResourceHandler
+import net.minecraft.core.Direction
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.block.entity.BlockEntity
 import net.neoforged.neoforge.capabilities.Capabilities
 import net.neoforged.neoforge.items.IItemHandler
 
-class DiskProxyItemHandler(
-    size: Int, diskHandler: IItemHandler, slotTransform: ISlotTransform
-) : DiskProxyResourceHandler<IItemHandler>(size, diskHandler, slotTransform, Capabilities.ItemHandler.ITEM),
-    IItemHandler {
-    constructor(size: Int, diskHandler: IItemHandler) : this(size, diskHandler, UNIT_SLOT_TRANSFORM)
+class DiskProxyItemHandler(bEntity: BlockEntity, ctx: Direction) :
+    DiskProxyResourceHandler<IItemHandler>(bEntity, Capabilities.ItemHandler.ITEM), IItemHandler {
 
     override fun getSlots(): Int = size
 

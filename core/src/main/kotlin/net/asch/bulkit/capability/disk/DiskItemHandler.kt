@@ -12,7 +12,7 @@ import net.minecraft.world.item.Item
 import net.minecraft.world.item.ItemStack
 import net.neoforged.neoforge.items.IItemHandler
 
-class DiskItemHandler(disk: ItemStack) : IItemHandler {
+class DiskItemHandler(disk: ItemStack, ctx: Void?) : IItemHandler {
     private val resourceType: ResourceType<Item> = BulkIt.RESOURCES.item.get()
     private var id: ResourceIdentifier<Item>? by NullableComponentDelegate(disk, resourceType.id)
     private val diskHandler: IDiskHandler = disk.getCapability(BulkItCapabilities.Disk.RESOURCE, Unit)!!
@@ -90,8 +90,6 @@ class DiskItemHandler(disk: ItemStack) : IItemHandler {
 
     companion object {
         private const val DEFAULT_CAPACITY_MULTIPLIER: Int = 8
-
-        fun create(stack: ItemStack, ctx: Void?): IItemHandler = DiskItemHandler(stack)
 
         fun capacity(maxStackSize: Int, diskHandler: IDiskHandler): Int =
             maxStackSize * diskHandler.getMultiplier(DEFAULT_CAPACITY_MULTIPLIER)
