@@ -5,7 +5,7 @@ import net.asch.bulkit.api.resource.DeferredResources
 import net.asch.bulkit.api.setup.BulkItCapabilities
 import net.asch.bulkit.api.setup.NetworkAttachments
 import net.asch.bulkit.capability.disk.DiskHandler
-import net.asch.bulkit.capability.disk.DiskModHandler
+import net.asch.bulkit.api.capability.disk.DiskModHandler
 import net.asch.bulkit.capability.network.NetworkLink
 import net.asch.bulkit.network.disk.DiskUpdatePayloads
 import net.asch.bulkit.network.network.NetworkConfiguratorPayloads

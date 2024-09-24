@@ -92,7 +92,7 @@ class DiskItemHandler(disk: ItemStack, ctx: Void?) : IItemHandler {
         private const val DEFAULT_CAPACITY_MULTIPLIER: Int = 8
 
         fun capacity(maxStackSize: Int, diskHandler: IDiskHandler): Int =
-            maxStackSize * diskHandler.getMultiplier(DEFAULT_CAPACITY_MULTIPLIER)
+            maxStackSize * diskHandler.mods.getMultiplier(DEFAULT_CAPACITY_MULTIPLIER)
 
         fun capacity(stack: ItemStack, diskHandler: IDiskHandler): Int = capacity(stack.maxStackSize, diskHandler)
     }

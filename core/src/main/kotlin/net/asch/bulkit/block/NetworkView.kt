@@ -1,6 +1,6 @@
 package net.asch.bulkit.block
 
-import net.asch.bulkit.api.block.BlockStates
+import net.asch.bulkit.api.BlockStates
 import net.asch.bulkit.api.setup.NetworkConfiguratorDataComponents
 import net.asch.bulkit.item.NetworkConfigurator
 import net.asch.bulkit.network.network.NetworkPayloads
@@ -19,11 +19,11 @@ import net.minecraft.world.phys.BlockHitResult
 
 class NetworkView(size: Int, properties: Properties) : Block(properties) {
     init {
-        registerDefaultState(stateDefinition.any().setValue(BlockStates.NETWORK_VIEW_SIZE, size))
+        registerDefaultState(stateDefinition.any().setValue(BlockStates.Network.VIEW_SIZE, size))
     }
 
     override fun createBlockStateDefinition(builder: StateDefinition.Builder<Block, BlockState>) {
-        builder.add(BlockStates.NETWORK_VIEW_SIZE)
+        builder.add(BlockStates.Network.VIEW_SIZE)
         super.createBlockStateDefinition(builder)
     }
 

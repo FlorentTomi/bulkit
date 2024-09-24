@@ -2,10 +2,10 @@ package net.asch.bulkit.api.setup
 
 import com.mojang.serialization.Codec
 import net.asch.bulkit.api.BulkItApi
-import net.asch.bulkit.api.data.DriveDiskHandler
 import net.minecraft.core.BlockPos
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.attachment.AttachmentType
+import net.neoforged.neoforge.items.ItemStackHandler
 import net.neoforged.neoforge.registries.DeferredHolder
 import net.neoforged.neoforge.registries.DeferredRegister
 import net.neoforged.neoforge.registries.NeoForgeRegistries
@@ -25,9 +25,13 @@ object NetworkAttachments {
                 .build()
         }
 
-    val DISK_HANDLER: DeferredHolder<AttachmentType<*>, AttachmentType<DriveDiskHandler>> =
+    val DISK_HANDLER =
         REGISTER.register("disk_handler") { ->
-            AttachmentType.serializable(::DriveDiskHandler).build()
+            AttachmentType.serializable { ->
+                object : ItemStackHandler(8) {
+
+                }
+            }.build()
         }
 
     fun register(modBus: IEventBus) = REGISTER.register(modBus)

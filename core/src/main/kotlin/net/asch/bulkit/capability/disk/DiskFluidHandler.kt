@@ -98,6 +98,6 @@ class DiskFluidHandler(private val disk: ItemStack, ctx: Void?) : IFluidHandlerI
         private const val DEFAULT_CAPACITY_MULTIPLIER: Int = 32
 
         fun capacity(diskHandler: IDiskHandler): Int =
-            (FluidType.BUCKET_VOLUME * diskHandler.getMultiplier(DEFAULT_CAPACITY_MULTIPLIER))
+            (FluidType.BUCKET_VOLUME * diskHandler.mods.getMultiplier(DEFAULT_CAPACITY_MULTIPLIER))
     }
 }

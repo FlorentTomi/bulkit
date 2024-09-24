@@ -5,6 +5,5 @@ interface IDiskHandler {
     var isLocked: Boolean
     var isVoidExcess: Boolean
     var amountI: Int
-
-    fun getMultiplier(defaultMultiplier: Int): Int
+    val mods: DiskModHandler
 }

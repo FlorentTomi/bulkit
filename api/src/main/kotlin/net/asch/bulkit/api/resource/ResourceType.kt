@@ -39,7 +39,7 @@ class ResourceType<R> private constructor(
     class Builder<R>(private val name: String) : Supplier<ResourceType<R>> {
         val key = "resource_$name"
         private lateinit var id: Supplier<DataComponentType<ResourceIdentifier<R>>>
-        private val disk: DeferredItem<Disk> = Disks.REGISTER.registerItem("disk_$name", ::Disk)
+        private val disk: DeferredItem<Disk> = Disks.registerDisk(name)
 
         private val diskCaps: MutableList<IRegisterCapability<Disk>> = mutableListOf()
         private val diskDriveCaps: MutableList<IRegisterCapability<BlockEntityType<*>>> = mutableListOf()

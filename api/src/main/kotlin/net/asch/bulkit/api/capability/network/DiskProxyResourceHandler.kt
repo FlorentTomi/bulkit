@@ -1,6 +1,6 @@
 package net.asch.bulkit.api.capability.network
 
-import net.asch.bulkit.api.block.BlockStates
+import net.asch.bulkit.api.BlockStates
 import net.asch.bulkit.api.capability.network.DiskProxyResourceHandler.ISlotTransform
 import net.asch.bulkit.api.setup.BulkItCapabilities
 import net.minecraft.world.level.block.entity.BlockEntity
@@ -16,16 +16,11 @@ abstract class DiskProxyResourceHandler<T>(
         )
 
     private val diskHandler: IItemHandler?
-        get() {
-            val rootPos = link?.rootPos
-            return if (rootPos != null) {
-                bEntity.level?.getCapability(BulkItCapabilities.Network.DRIVE_DISK_HANDLER, rootPos, Unit)
-            } else {
-                bEntity.level?.getCapability(BulkItCapabilities.Network.DRIVE_DISK_HANDLER, bEntity.blockPos, Unit)
-            }
-        }
+        get() = bEntity.level?.getCapability(
+            BulkItCapabilities.Network.DRIVE_DISK_HANDLER, link?.rootPos ?: bEntity.blockPos, Unit
+        )
 
-    val size: Int = bEntity.blockState.getValue(BlockStates.NETWORK_VIEW_SIZE)
+    val size: Int = bEntity.blockState.getValue(BlockStates.Network.VIEW_SIZE)
 
     private fun <R> transformAndInvoke(slot: Int, errorVal: R, fn: (T?) -> R?): R {
         val transformedSlot = link?.getRootSlot(slot) ?: slot
